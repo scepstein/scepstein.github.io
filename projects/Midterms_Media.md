@@ -43,6 +43,7 @@ The 2022 elections featured many unique candidates nationwide, which was likely 
 
 Firstly, I examined Hochul's performance statewide relative to Biden's 2020 presidential results, which will be used as a baseline. I also looked at Schumer's performance in his campaign for U.S. Senate (2022). Schumer is an extremely popular statewide elected, winning by 43 points in 2016 and 34 points in Republican-wave year 2010. In 2022, Schumer only carried the state by 12 points, suggesting that Hochul's candidate quality was not the only detractor for Democrats in the state. Both Schumer and Hochul under-performed Biden's electoral gains (by % of vote acquired) in all 62 counties. 
 
+![](src="../img/Midterms_Media/hochulvbiden.jpg" | width=100)
 <img class="img-fluid" src="../img/Midterms_Media/hochulvbiden.jpg">
 <img class="img-fluid" src="../img/Midterms_Media/schumervbiden.jpg">
 
