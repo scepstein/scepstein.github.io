@@ -43,15 +43,15 @@ The 2022 elections featured many unique candidates nationwide, which was likely 
 
 Firstly, I examined Hochul's performance statewide relative to Biden's 2020 presidential results, which will be used as a baseline. I also looked at Schumer's performance in his campaign for U.S. Senate (2022). Schumer is an extremely popular statewide elected, winning by 43 points in 2016 and 34 points in Republican-wave year 2010. In 2022, Schumer only carried the state by 12 points, suggesting that Hochul's candidate quality was not the only detractor for Democrats in the state. Both Schumer and Hochul under-performed Biden's electoral gains (by % of vote acquired) in all 62 counties. 
 
-#Insert images here
+<img class="img-fluid" src="../img/Midterms_Media/hochulvbiden.jpg">
+<img class="img-fluid" src="../img/Midterms_Media/schumervbiden.jpg">
 
 #### Pennsylvania shows a different story
 
 As seen in several competitive battleground states across the country, where Republicans were predicted to have an edge, Democratic candidates produced many statewide victories, bucking historical precedent. In Pennsylvania, senatorial candidate John Fetterman (D) defeated challenger Mehemt Oz (R) and gubernatorial candidate Josh Shapiro (D) defeated challenger Douglas Mastriano (R), by much larger margins than the state has offered in recent Presidential elections to both parties. Shapiro out-performed Biden's margin in every county, winning the state by almost 15 points compared to Biden's 1 point victory. Fetterman outperformed Biden's margin in all but two counties: Pike and Monroe. Across the entire map, there appears to be a general trend that the further a county is located away from New York City, the larger over-performance by the 2022 Democratic candidates. 
 
-#Insert images here
-
-
+<img class="img-fluid" src="../img/Midterms_Media/shapirovbiden.jpg">
+<img class="img-fluid" src="../img/Midterms_Media/fettermanvbiden.jpg">
 
 ## Data Sources
 
