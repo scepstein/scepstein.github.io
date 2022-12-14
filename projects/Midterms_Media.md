@@ -1,7 +1,7 @@
 ---
 layout: project
 type: project
-image: img/cotton/cotton-square.png
+image: img/Midterms_Media/icon.jpg
 title: "The Role of Media in 2022 Midterm Elections"
 date: 2022
 published: true
@@ -60,40 +60,52 @@ To look at additional examples of the "proximity to New York City effect," we ca
 <img class="img-fluid" src="../img/Midterms_Media/lamontvbiden.jpg" width="45%">
 <img class="img-fluid" src="../img/Midterms_Media/blumenthalvbiden.jpg" width="45%">
 
+#### The role of media
 
+Designated media areas (DMAs) are geographic boundaries used to determine television and radio markets. Presumably, everyone in the same DMA is receiving the same news tailored to the culture of their geographic region. Mapped below, the New York City DMA contains small sections of Pennsylvania and Connecticut in addition to surrounding areas in New York and New Jersey. Notably, these sections include Pike County, PA and a portion of Southwestern Connecticut. These are the same areas where statewide Democratic candidates performed the worst relative to Biden's 2020 numbers. 
+
+<img class="img-fluid" src="../img/Midterms_Media/nycdma_zoomout.jpg" width="45%">
+<img class="img-fluid" src="../img/Midterms_Media/nycdma_zoomin.jpg" width="45%">
+
+<img class="img-fluid" src="../img/Midterms_Media/Sen_spread.jpg" width="45%">
+<img class="img-fluid" src="../img/Midterms_Media/Gov_spread.jpg" width="45%">
+
+Connecticut provides election results by township, so we have increased granularity to visualize regions inside and outside the NYC DMA. In both statewide races, the median township in the New York City market featured a worse performance for Democrats than the 25th percentile in the Hartford and New Haven market that covers the rest of the state. In addition to the strong negative outliers present in the NYC media market, these plots support the trends suggested by the map data.  
+
+<img class="img-fluid" src="../img/Midterms_Media/CT_bp_Sen.jpg" width="45%">
+<img class="img-fluid" src="../img/Midterms_Media/CT_bp_Gov.jpg" width="45%">
 
 ## Data Sources
 
-National map of designed market areas (DMAs)
-https://datablends.us/2021/01/14/a-useful-dma-shapefile-for-tableau-and-alteryx/
+[National map of designed market areas (DMAs)]
+(https://datablends.us/2021/01/14/a-useful-dma-shapefile-for-tableau-and-alteryx/)
 
-Shapefile of New York counties
-https://gis.ny.gov/gisdata/inventories/details.cfm?DSID=927
+[Shapefile of New York counties]
+(https://gis.ny.gov/gisdata/inventories/details.cfm?DSID=927)
 
-Shapefile of Pennsylvania counties
-https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=24
+[Shapefile of Pennsylvania counties]
+(https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=24)
  
-Shapefile of Connecticut counties 
-https://catalog.data.gov/dataset/tiger-line-shapefile-2019-state-connecticut-current-county-subdivision-state-based
+[Shapefile of Connecticut counties] 
+(https://catalog.data.gov/dataset/tiger-line-shapefile-2019-state-connecticut-current-county-subdivision-state-based)
 
-Pennsylvania election results, 2022
-https://www.nytimes.com/interactive/2022/11/08/us/elections/results-pennsylvania.html
+[Pennsylvania election results, 2022]
+(https://www.nytimes.com/interactive/2022/11/08/us/elections/results-pennsylvania.html)
 
-Pennsylvania election results, 2020
-https://en.wikipedia.org/wiki/2020_United_States_presidential_election_in_Pennsylvania
+[Pennsylvania election results, 2020]
+(https://en.wikipedia.org/wiki/2020_United_States_presidential_election_in_Pennsylvania)
 
-New York election results, 2022
-https://www.nytimes.com/interactive/2022/11/08/us/elections/results-new-york.html
+[New York election results, 2022]
+(https://www.nytimes.com/interactive/2022/11/08/us/elections/results-new-york.html)
 
-New York election results, 2020
-https://en.wikipedia.org/wiki/2020_United_States_presidential_election_in_New_York
+[New York election results, 2020]
+(https://en.wikipedia.org/wiki/2020_United_States_presidential_election_in_New_York)
 
-Connecticut election results, 2022
-https://www.nytimes.com/interactive/2022/11/08/us/elections/results-connecticut.html
+[Connecticut election results, 2022]
+(https://www.nytimes.com/interactive/2022/11/08/us/elections/results-connecticut.html)
 
-Connecticut election resutls, 2020
-https://www.nbcconnecticut.com/news/politics/decision-2020/town-by-town-results-how-did-connecticut-vote-in-the-2020-presidential-election/2355898/
-
+[Connecticut election resutls, 2020]
+(https://www.nbcconnecticut.com/news/politics/decision-2020/town-by-town-results-how-did-connecticut-vote-in-the-2020-presidential-election/2355898/)
 
 ### Disclaimer
 
