@@ -75,6 +75,39 @@ Connecticut provides election results by township, so we have increased granular
 <img class="img-fluid" src="../img/Midterms_Media/CT_bp_Sen.jpg" width="45%">
 <img class="img-fluid" src="../img/Midterms_Media/CT_bp_Gov.jpg" width="45%">
 
+#### Influence from the big city
+
+The maps generated thus far have suggested proximity to New York City relates to electoral performance in Pennsylvania and Connecticut. I generated some correlation plots to determine how strong the correlation is. 
+
+```{r}
+#Code used to calculate distance between each PA county and Manhattan 
+manhattan = subset(NYS, NAME == "New York")
+
+PA$Manhattan_dist = c(0)
+for (x in 1:length(PA$COUNTY_NAM)){
+  PA$Manhattan_dist[x] = st_distance(manhattan, PA[x,])[1,1]
+}
+```
+
+[Click here to see the rest of the code from this project](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media)
+
+Firstly, within New York States there was no apparent correlation between proximity to Manhattan and either Schumer or Hochul's performances (r = 0.1 and 0.14, respectively), suggesting the statewide issues these two candidates faced were unrelated to media or culture unique to NYC.
+
+<img class="img-fluid" src="../img/Midterms_Media/Schumer_dist.jpg" width="45%">
+<img class="img-fluid" src="../img/Midterms_Media/Hochul_dist.jpg" width="45%">
+
+In Pennsylvania, the correlation was more significant (r = 0.52 for Shapiro and 0.61 for Fetterman). Across the state, Fetterman and Shapiro performed better in the Western part of the state, in almost all counties with better performances than Biden's 2020 numbers. In both cases, the worst two preforming counties are among the closest. 
+
+<img class="img-fluid" src="../img/Midterms_Media/Fetterman_dist.jpg" width="45%">
+<img class="img-fluid" src="../img/Midterms_Media/Shapiro_dist.jpg" width="45%">
+
+Similar to before, Connecticut displays an interesting regional effect. Well displayed in Blumenthal's plots, towns within 100 km of Manhattan featured a strong correlation (r = 0.69) between proximity and electoral performance. Beyond 100 km, the effect is more or less lost (r = 0.18), yielding the full data set an r value of 0.43. Lamont's governor results are less pronounced but the two regions still persist (r = 0.53, 0.25, and 0.34, respectively).
+
+<img class="img-fluid" src="../img/Midterms_Media/Blumenthal_dist.jpg" width="45%">
+<img class="img-fluid" src="../img/Midterms_Media/Lamont_dist.jpg" width="45%">
+
+#### Conclusions
+
 ## Data Sources
 
 [National map of designed market areas (DMAs)](https://datablends.us/2021/01/14/a-useful-dma-shapefile-for-tableau-and-alteryx/)
