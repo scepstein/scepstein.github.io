@@ -79,7 +79,7 @@ Connecticut provides election results by township, so we have increased granular
 
 The maps generated thus far have suggested proximity to New York City relates to electoral performance in Pennsylvania and Connecticut. I generated some correlation plots to determine how strong the correlation is. 
 
-{% gist 6112e5bb39eea70a27aee089f85a1996 %}
+<script src="https://gist.github.com/stevenyap/7038119.js"></script>
 
 [Click here to see the rest of the code from this project](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media)
 
