@@ -79,7 +79,26 @@ Connecticut provides election results by township, so we have increased granular
 
 The maps generated thus far have suggested proximity to New York City relates to electoral performance in Pennsylvania and Connecticut. I generated some correlation plots to determine how strong the correlation is. 
 
-<script src="https://gist.github.com/stevenyap/7038119.js"></script>
+<script src="https://gist.github.com/scepstein/6112e5bb39eea70a27aee089f85a1996.js"></script>
+
+```{r}
+#Code used to calculate distance between each PA county and Manhattan 
+manhattan = subset(NYS, NAME == "New York")
+
+PA$Manhattan_dist = c(0)
+for (x in 1:length(PA$COUNTY_NAM)){
+  PA$Manhattan_dist[x] = st_distance(manhattan, PA[x,])[1,1]
+}
+```
+```{r }
+#Code used to calculate distance between each PA county and Manhattan 
+manhattan = subset(NYS, NAME == "New York")
+
+PA$Manhattan_dist = c(0)
+for (x in 1:length(PA$COUNTY_NAM)){
+  PA$Manhattan_dist[x] = st_distance(manhattan, PA[x,])[1,1]
+}
+```
 
 [Click here to see the rest of the code from this project](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media)
 
