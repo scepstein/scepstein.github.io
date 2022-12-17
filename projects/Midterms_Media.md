@@ -17,7 +17,11 @@ labels:
 summary: "Analysis of 2022 Midterm Elections and the role of media markets."
 ---
 
-## Code and Packages Used
+### Introduction
+
+In this blog post, I plan to use the R programming language to analyze the results of the 2022 Midterm elections in New York, Connecticut, and Pennsylvania. I will compare county and town election results from the 2020 presidential election to senatorial and gubernatorial elections in 2022. Further, I look at the impact of geospatial media markets on election results in these states. Through generation of maps and data plots, I hope to identify any connections between common media presence and trends in election results. 
+
+### Code and Packages Used
 
 RStudio was used as the IDE for this project. The entire project was analyzed using the R programming language. Data in csv, json, and shp file types were analyzed. The following R packages were used: rgdal, sf, rjson, ggplot2, and cowplot.
 
@@ -108,7 +112,9 @@ Similar to before, Connecticut displays an interesting regional effect. Well dis
 
 #### Conclusions
 
-## Data Sources
+While the role of media markets seemed to have little effect on differentiating the relatively poor performances of Hochul and Schumer in different regions throughout New York State in 2022, the small sections of Pennsylvania and Connecticut that are present in New York City's media market appear to have significantly worse performance for Democrats than other regions of the respective states. The role of media is definitely one possibility to consider. Additionally, these regions with close proximity to New York City likely feature differing demography and culture compared to the remaining part of each state. That is to emphasize that correlation may not reflect causation necessarily. The counties and towns included in the New York City media market are done so because the NYC metropolitan area has great influence and relevance in these regions, grouping them by cultural similarity. While there are many factors to consider, it is interesting to see the potential influence NYC has on elections in neighboring states. 
+
+### Data Sources
 
 [National map of designed market areas (DMAs)](https://datablends.us/2021/01/14/a-useful-dma-shapefile-for-tableau-and-alteryx/)
 
