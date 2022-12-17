@@ -25,7 +25,7 @@ In this blog post, I plan to use the R programming language to analyze the resul
 
 RStudio was used as the IDE for this project. The entire project was analyzed using the R programming language. Data in csv, json, and shp file types were analyzed. The following R packages were used: rgdal, sf, rjson, ggplot2, and cowplot.
 
-Click here to view all the code used to produce analysis and visualizations below. 
+[Click here](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media) to view all the code used to produce analysis and visualizations below. 
 
 ### Data Disclosue
 
@@ -50,12 +50,88 @@ Firstly, I examined Hochul's performance statewide relative to Biden's 2020 pres
 <img class="img-fluid" src="../img/Midterms_Media/hochulvbiden.jpg" width="45%">
 <img class="img-fluid" src="../img/Midterms_Media/schumervbiden.jpg" width="45%">
 
+```r
+#Code used to generate NYS maps
+hochulcounties = subset(NYS, Hochul_v_Biden > 0)
+NYS = st_transform(NYS, "EPSG:4269")
+
+library(ggplot2)
+main.plot = ggplot()+
+  geom_sf(data=NYS, aes(fill = Hochul_v_Biden), size = 1.5)+
+  scale_fill_gradient2(low = "red", mid = "white", high = "blue")+
+  theme_light()+
+  ggtitle("Hochul '22 vs. Biden '20 (Difference in percent of vote acquired)")+
+  labs(subtitle = "Comparison of Hochul gubernatorial results '22 to Biden presidential results '20.")+
+  labs(caption = "Hochul underperformed Biden in all counties.")+
+  labs(fill = "Hochul performance \nrelative to Biden (%)")+
+  geom_sf(data=hochulcounties, alpha = 0, size = 1.5, color = "blue")+
+  theme(axis.text = element_text(size = 12))+
+  theme(plot.title = element_text(size = 20))+
+  theme(plot.caption = element_text(size = 14))+
+  theme(plot.subtitle = element_text(size = 14))
+
+inset.plot = ggplot()+
+  geom_sf(data=NYS, aes(fill = Hochul_v_Biden), size = 1.5, show.legend = FALSE)+
+  scale_fill_gradient2(low = "red", mid = "white", high = "blue")+
+  theme_light()+
+  theme(panel.grid.major = element_blank())+
+  theme(axis.text = element_blank())+
+  xlim(-74.3, -73.5) + ylim (40.5,41)+
+  theme(plot.title = element_text(size = 12))+
+  ggtitle("NYC metropolitan area")
+
+library(cowplot)
+final_plot = ggdraw() +
+  draw_plot(main.plot) +
+  draw_plot(inset.plot, x = 0.05, y = 0.11, width = 0.3, height = 0.25)
+```
+[Click here to see the rest of the code from this project](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media)
+
 #### Pennsylvania shows a different story
 
 As seen in several competitive battleground states across the country, where Republicans were predicted to have an edge, Democratic candidates produced many statewide victories, bucking historical precedent. In Pennsylvania, senatorial candidate John Fetterman (D) defeated challenger Mehemt Oz (R) and gubernatorial candidate Josh Shapiro (D) defeated challenger Douglas Mastriano (R), by much larger margins than the state has offered in recent Presidential elections to both parties. Shapiro out-performed Biden's margin in every county, winning the state by almost 15 points compared to Biden's 1 point victory. Fetterman outperformed Biden's margin in all but two counties: Pike and Monroe. Across the entire map, there appears to be a general trend that the further a county is located away from New York City, the larger over-performance by the 2022 Democratic candidates. 
 
 <img class="img-fluid" src="../img/Midterms_Media/shapirovbiden.jpg" width="45%">
 <img class="img-fluid" src="../img/Midterms_Media/fettermanvbiden.jpg" width="45%">
+
+```r
+#Conversion of election results from json to R dataframe 
+County = c(0)
+for (x in 2:68){
+  County[x-1] = PAvotes[["races"]][[1]][["reporting_units"]][[x]][["name"]]
+}
+rm(x)
+PA_Senate = data.frame(County)
+rm(County)
+
+PA_Senate$Winner_votes = c(0)
+PA_Senate$Loser_votes = c(0)
+PA_Senate$Winner = c(0)
+PA_Senate$Loser = c(0)
+
+for (x in 2:68){
+  PA_Senate$Winner_votes[x-1] = PAvotes[["races"]][[1]][["reporting_units"]][[x]][["candidates"]][[1]][["votes"]][["total"]]
+  PA_Senate$Loser_votes[x-1] = PAvotes[["races"]][[1]][["reporting_units"]][[x]][["candidates"]][[2]][["votes"]][["total"]]
+  PA_Senate$Winner[x-1] = PAvotes[["races"]][[1]][["reporting_units"]][[x]][["candidates"]][[1]][["nyt_id"]]
+  PA_Senate$Loser[x-1] = PAvotes[["races"]][[1]][["reporting_units"]][[x]][["candidates"]][[2]][["nyt_id"]]
+}
+rm(x)
+
+PA_Senate$Fetterman_votes = c(0)
+PA_Senate$Oz_votes = c(0)
+
+for (x in 1:length(PA_Senate$County)){
+  if(PA_Senate$Winner[x] == "fetterman-j"){
+    PA_Senate$Fetterman_votes[x] = PA_Senate$Winner_votes[x]
+    PA_Senate$Oz_votes[x] = PA_Senate$Loser_votes[x]
+  }
+  if(PA_Senate$Winner[x] == "oz-m"){
+    PA_Senate$Oz_votes[x] = PA_Senate$Winner_votes[x]
+    PA_Senate$Fetterman_votes[x] = PA_Senate$Loser_votes[x]
+  }
+}
+```
+[Click here to see the rest of the code from this project](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media)
 
 #### Southwestern Connecticut shifts rightward
 
@@ -92,7 +168,6 @@ for (x in 1:length(PA$COUNTY_NAM)){
   PA$Manhattan_dist[x] = st_distance(manhattan, PA[x,])[1,1]
 }
 ```
-
 [Click here to see the rest of the code from this project](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media)
 
 Firstly, within New York States there was no apparent correlation between proximity to Manhattan and either Schumer or Hochul's performances (r = 0.1 and 0.14, respectively), suggesting the statewide issues these two candidates faced were unrelated to media or culture unique to NYC.
