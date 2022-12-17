@@ -6,7 +6,7 @@
     "email": " ",
     "phone": " ",
     "website": "https://scepstein.github.io/",
-    "summary": "Insert new bio here",
+    "summary": "After 10 years as a trained laboratory researcher, I greatly respect the power of data to provide us informaiton about the world around us. I aim to use my creativity and curiosity to harness programming skills in R, Python, and SQL to explore deep quesitons that can be answered with data analysis. This portfolio features projects focused in political elections and scientific topics to display my coding experience and capabilities. My primary goal is to continue to learn new tools to answer questions more effectively.",
     "location": { "address": "", "postalCode": "", "city": "New York", "countryCode": "USA", "region": "New York" },
     "profiles": [
       { "network": "github", "username": "mmaluhia", "url": "https://github.com/scepstein" },
@@ -14,10 +14,12 @@
     ]
   },
   "interests": [
-    { "name": "Analytics" },
-    { "name": "Visualization" },
+    { "name": "R/Python/SQL" },
+    { "name": "Data visualization" },
     { "name": "Problem solving" },
-    { "name": "Big data" }
+    { "name": "Big data" },
+    { "name": "Politics" },
+    { "name": "Science" }
   ],
   "skills": [
     {
