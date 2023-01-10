@@ -1,7 +1,7 @@
 ---
 layout: essay
 type: essay
-title: "Exploring Data and Encouraging Creativity as a Data Analyst or Programmer"
+title: "Exploring data and encouraging creativity as a data analyst or Programmer"
 # All dates must be YYYY-MM-DD format!
 date: 2022-02-16
 published: true
