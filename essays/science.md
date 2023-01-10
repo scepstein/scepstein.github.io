@@ -1,7 +1,7 @@
 ---
 layout: essay
 type: essay
-title: "From experiments to algorithms: How my research experience has shaped my approach to data analysis"
+title: "From experiments to algorithms: How my research experience has shaped my approach to data analysis?"
 # All dates must be YYYY-MM-DD format!
 date: 2022-10-29
 published: true
