@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="The role of media in 2022 midterm elections | Samuel Epstein | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://avatars.githubusercontent.com/u/102193968?v=4">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Samuel Epstein | Professional Portfolio">
+    <meta property="og:url" content="https://scepstein.github.io/projects/Midterms_Media.html">
+    <meta property="og:title" content="The role of media in 2022 midterm elections | Samuel Epstein | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/102193968?v=4">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>The role of media in 2022 midterm elections | Samuel Epstein | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Samuel Epstein</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">The role of media in 2022 midterm elections</h1>
+ <h3 id="introduction">Introduction</h3>
+
+<p>In this blog post, I plan to use the R programming language to analyze the results of the 2022 Midterm elections in New York, Connecticut, and Pennsylvania. I will compare county and town election results from the 2020 presidential election to senatorial and gubernatorial elections in 2022. Further, I look at the impact of geospatial media markets on election results in these states. Through generation of maps and data plots, I hope to identify any connections between common media presence and trends in election results.</p>
+
+<h3 id="code-and-packages-used">Code and Packages Used</h3>
+
+<p>RStudio was used as the IDE for this project. The entire project was analyzed using the R programming language. Data in csv, json, and shp file types were analyzed. The following R packages were used: rgdal, sf, rjson, ggplot2, and cowplot.</p>
+
+<p><a href="https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media">Click here</a> to view all the code used to produce analysis and visualizations below.</p>
+
+<h3 id="data-disclosue">Data Disclosue</h3>
+
+<p>I have produced all of the visualizations shown below and links to the corresponding code are included above. All data that was retrieved from outside sources is referenced at the end of the article.</p>
+
+<h2 id="analysis-and-results">Analysis and Results</h2>
+
+<h4 id="midterm-elections">Midterm Elections</h4>
+
+<p>In the United States, midterm elections are held halfway through each presidential term; they provide the public with the opportunity to reshape most federal and state offices through democratic process. Historically, the political party that the President represents will face an unfavorable environment in the midterms, which frequently results in large losses for that party. One popular theory as to why this occurs is that the segment of the public that opposes the actions and ideology of the incumbent president will turnout to vote at a larger rate than the complacent supporters. Leading up to election day in 2022, the presidency is occupied by Joseph Biden, a Democrat, producing the expectation from historical precedent that the national environment is favorable to Republicans. Practically this means that Republican candidates are expected to do better, at the expense of their Democratic counterparts, shifting the outcomes primarily in races that are close.</p>
+
+<h4 id="results-of-2022">Results of 2022</h4>
+
+<p>With the results of the November 8th elections almost completed, Democrats appear to have performed much better than what was expected from historical precedent. Losses for Democrats in key U.S. House, U.S. Senate, and state governors’ races were kept to a minimum. However, this trend was not observed ubiquitously throughout the nation. Democratic New York governor Kathy Hochul won her election by only 6 points. Statewide races are typically a lock for Democrats in New York, where former governor Andrew Cuomo won his previous election by 23 points in 2018, the same margin Joe Biden won the state by in 2020. Throughout the state, Democrats lost several U.S. House races that Biden had carried in 2020, while Democrats out of New York won in much more difficult terrain.</p>
+
+<h4 id="what-happened-in-new-york">What happened in New York?</h4>
+
+<p>The 2022 elections featured many unique candidates nationwide, which was likely responsible for several candidate-specific election outcomes. While candidate quality was likely a relevant factor in New York, the poor performance by Democratic candidates on all levels of the ballot is indicative of a larger systematic effect than individual candidate quality. One theory that I’ve come across relates to the effect of media in New York, particularly surrounding New York City. Proponents of the media bias theory claim that New York City based media, more so than media in other places, supports Republican ideology and talking points and ended up promoting Republican candidates in the midterm elections. As a result, I’ve gathered available data in order to determine if this theory is sensible.</p>
+
+<p>Firstly, I examined Hochul’s performance statewide relative to Biden’s 2020 presidential results, which will be used as a baseline. I also looked at Schumer’s performance in his campaign for U.S. Senate (2022). Schumer is an extremely popular statewide elected, winning by 43 points in 2016 and 34 points in Republican-wave year 2010. In 2022, Schumer only carried the state by 12 points, suggesting that Hochul’s candidate quality was not the only detractor for Democrats in the state. Both Schumer and Hochul under-performed Biden’s electoral gains (by % of vote acquired) in all 62 counties.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/hochulvbiden.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/schumervbiden.jpg" width="45%" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Code used to generate NYS maps</span><span class="w">
+</span><span class="n">hochulcounties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">NYS</span><span class="p">,</span><span class="w"> </span><span class="n">Hochul_v_Biden</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="n">NYS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">st_transform</span><span class="p">(</span><span class="n">NYS</span><span class="p">,</span><span class="w"> </span><span class="s2">"EPSG:4269"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">main.plot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ggplot</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_sf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">NYS</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Hochul_v_Biden</span><span class="p">),</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.5</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_gradient2</span><span class="p">(</span><span class="n">low</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"red"</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"blue"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_light</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Hochul '22 vs. Biden '20 (Difference in percent of vote acquired)"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Comparison of Hochul gubernatorial results '22 to Biden presidential results '20."</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Hochul underperformed Biden in all counties."</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Hochul performance \nrelative to Biden (%)"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_sf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">hochulcounties</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.5</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"blue"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span><span class="p">))</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">))</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">14</span><span class="p">))</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">14</span><span class="p">))</span><span class="w">
+
+</span><span class="n">inset.plot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ggplot</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_sf</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">NYS</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Hochul_v_Biden</span><span class="p">),</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1.5</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_gradient2</span><span class="p">(</span><span class="n">low</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"red"</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"blue"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_light</span><span class="p">()</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">panel.grid.major</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_blank</span><span class="p">())</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_blank</span><span class="p">())</span><span class="o">+</span><span class="w">
+  </span><span class="n">xlim</span><span class="p">(</span><span class="m">-74.3</span><span class="p">,</span><span class="w"> </span><span class="m">-73.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ylim</span><span class="w"> </span><span class="p">(</span><span class="m">40.5</span><span class="p">,</span><span class="m">41</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span><span class="p">))</span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"NYC metropolitan area"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">cowplot</span><span class="p">)</span><span class="w">
+</span><span class="n">final_plot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ggdraw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">draw_plot</span><span class="p">(</span><span class="n">main.plot</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">draw_plot</span><span class="p">(</span><span class="n">inset.plot</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.05</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.11</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.3</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.25</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+<p><a href="https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media">Click here to see the rest of the code from this project</a></p>
+
+<h4 id="pennsylvania-shows-a-different-story">Pennsylvania shows a different story</h4>
+
+<p>As seen in several competitive battleground states across the country, where Republicans were predicted to have an edge, Democratic candidates produced many statewide victories, bucking historical precedent. In Pennsylvania, senatorial candidate John Fetterman (D) defeated challenger Mehemt Oz (R) and gubernatorial candidate Josh Shapiro (D) defeated challenger Douglas Mastriano (R), by much larger margins than the state has offered in recent Presidential elections to both parties. Shapiro out-performed Biden’s margin in every county, winning the state by almost 15 points compared to Biden’s 1 point victory. Fetterman outperformed Biden’s margin in all but two counties: Pike and Monroe. Across the entire map, there appears to be a general trend that the further a county is located away from New York City, the larger over-performance by the 2022 Democratic candidates.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/shapirovbiden.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/fettermanvbiden.jpg" width="45%" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Conversion of election results from json to R dataframe </span><span class="w">
+</span><span class="n">County</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">68</span><span class="p">){</span><span class="w">
+  </span><span class="n">County</span><span class="p">[</span><span class="n">x</span><span class="m">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PAvotes</span><span class="p">[[</span><span class="s2">"races"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"reporting_units"</span><span class="p">]][[</span><span class="n">x</span><span class="p">]][[</span><span class="s2">"name"</span><span class="p">]]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="n">rm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w">
+</span><span class="n">PA_Senate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">County</span><span class="p">)</span><span class="w">
+</span><span class="n">rm</span><span class="p">(</span><span class="n">County</span><span class="p">)</span><span class="w">
+
+</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner_votes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Loser_votes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Loser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">2</span><span class="o">:</span><span class="m">68</span><span class="p">){</span><span class="w">
+  </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner_votes</span><span class="p">[</span><span class="n">x</span><span class="m">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PAvotes</span><span class="p">[[</span><span class="s2">"races"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"reporting_units"</span><span class="p">]][[</span><span class="n">x</span><span class="p">]][[</span><span class="s2">"candidates"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"votes"</span><span class="p">]][[</span><span class="s2">"total"</span><span class="p">]]</span><span class="w">
+  </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Loser_votes</span><span class="p">[</span><span class="n">x</span><span class="m">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PAvotes</span><span class="p">[[</span><span class="s2">"races"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"reporting_units"</span><span class="p">]][[</span><span class="n">x</span><span class="p">]][[</span><span class="s2">"candidates"</span><span class="p">]][[</span><span class="m">2</span><span class="p">]][[</span><span class="s2">"votes"</span><span class="p">]][[</span><span class="s2">"total"</span><span class="p">]]</span><span class="w">
+  </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner</span><span class="p">[</span><span class="n">x</span><span class="m">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PAvotes</span><span class="p">[[</span><span class="s2">"races"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"reporting_units"</span><span class="p">]][[</span><span class="n">x</span><span class="p">]][[</span><span class="s2">"candidates"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"nyt_id"</span><span class="p">]]</span><span class="w">
+  </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Loser</span><span class="p">[</span><span class="n">x</span><span class="m">-1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PAvotes</span><span class="p">[[</span><span class="s2">"races"</span><span class="p">]][[</span><span class="m">1</span><span class="p">]][[</span><span class="s2">"reporting_units"</span><span class="p">]][[</span><span class="n">x</span><span class="p">]][[</span><span class="s2">"candidates"</span><span class="p">]][[</span><span class="m">2</span><span class="p">]][[</span><span class="s2">"nyt_id"</span><span class="p">]]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="n">rm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w">
+
+</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Fetterman_votes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Oz_votes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">County</span><span class="p">)){</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"fetterman-j"</span><span class="p">){</span><span class="w">
+    </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Fetterman_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w">
+    </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Oz_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Loser_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"oz-m"</span><span class="p">){</span><span class="w">
+    </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Oz_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Winner_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w">
+    </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Fetterman_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PA_Senate</span><span class="o">$</span><span class="n">Loser_votes</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+<p><a href="https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media">Click here to see the rest of the code from this project</a></p>
+
+<h4 id="southwestern-connecticut-shifts-rightward">Southwestern Connecticut shifts rightward</h4>
+
+<p>To look at additional examples of the “proximity to New York City effect,” we can look to one of New York’s eastern neighbors: Connecticut. Across the state, we see a similar trend where the two Democratic incumbents, Lamont for Governor and Blumenthal for Senate, ran behind Biden’s 2020 numbers almost across the board, but especially in the southwestern region of the state, which is closest in proximity to New York City.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/lamontvbiden.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/blumenthalvbiden.jpg" width="45%" /></p>
+
+<h4 id="the-role-of-media">The role of media</h4>
+
+<p>Designated media areas (DMAs) are geographic boundaries used to determine television and radio markets. Presumably, everyone in the same DMA is receiving the same news tailored to the culture of their geographic region. Mapped below, the New York City DMA contains small sections of Pennsylvania and Connecticut in addition to surrounding areas in New York and New Jersey. Notably, these sections include Pike County, PA and a portion of Southwestern Connecticut. These are the same areas where statewide Democratic candidates performed the worst relative to Biden’s 2020 numbers.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/nycdma_zoomout.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/nycdma_zoomin.jpg" width="45%" /></p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/Sen_spread.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/Gov_spread.jpg" width="45%" /></p>
+
+<p>Connecticut provides election results by township, so we have increased granularity to visualize regions inside and outside the NYC DMA. In both statewide races, the median township in the New York City market featured a worse performance for Democrats than the 25th percentile in the Hartford and New Haven market that covers the rest of the state. In addition to the strong negative outliers present in the NYC media market, these plots support the trends suggested by the map data.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/CT_bp_Sen.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/CT_bp_Gov.jpg" width="45%" /></p>
+
+<h4 id="influence-from-the-big-city">Influence from the big city</h4>
+
+<p>The maps generated thus far have suggested proximity to New York City relates to electoral performance in Pennsylvania and Connecticut. I generated some correlation plots to determine how strong the correlation is.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Code used to calculate distance between each PA county and Manhattan </span><span class="w">
+</span><span class="n">manhattan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">NYS</span><span class="p">,</span><span class="w"> </span><span class="n">NAME</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"New York"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">PA</span><span class="o">$</span><span class="n">Manhattan_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">)</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">PA</span><span class="o">$</span><span class="n">COUNTY_NAM</span><span class="p">)){</span><span class="w">
+  </span><span class="n">PA</span><span class="o">$</span><span class="n">Manhattan_dist</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">st_distance</span><span class="p">(</span><span class="n">manhattan</span><span class="p">,</span><span class="w"> </span><span class="n">PA</span><span class="p">[</span><span class="n">x</span><span class="p">,])[</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+<p><a href="https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media">Click here to see the rest of the code from this project</a></p>
+
+<p>Firstly, within New York States there was no apparent correlation between proximity to Manhattan and either Schumer or Hochul’s performances (r = 0.1 and 0.14, respectively), suggesting the statewide issues these two candidates faced were unrelated to media or culture unique to NYC.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/Schumer_dist.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/Hochul_dist.jpg" width="45%" /></p>
+
+<p>In Pennsylvania, the correlation was more significant (r = 0.52 for Shapiro and 0.61 for Fetterman). Across the state, Fetterman and Shapiro performed better in the Western part of the state, in almost all counties with better performances than Biden’s 2020 numbers. In both cases, the worst two preforming counties are among the closest.</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/Fetterman_dist.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/Shapiro_dist.jpg" width="45%" /></p>
+
+<p>Similar to before, Connecticut displays an interesting regional effect. Well displayed in Blumenthal’s plots, towns within 100 km of Manhattan featured a strong correlation (r = 0.69) between proximity and electoral performance. Beyond 100 km, the effect is more or less lost (r = 0.18), yielding the full data set an r value of 0.43. Lamont’s governor results are less pronounced but the two regions still persist (r = 0.53, 0.25, and 0.34, respectively).</p>
+
+<p><img class="img-fluid" src="../img/Midterms_Media/Blumenthal_dist.jpg" width="45%" />
+<img class="img-fluid" src="../img/Midterms_Media/Lamont_dist.jpg" width="45%" /></p>
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>While the role of media markets seemed to have little effect on differentiating the relatively poor performances of Hochul and Schumer in different regions throughout New York State in 2022, the small sections of Pennsylvania and Connecticut that are present in New York City’s media market appear to have significantly worse performance for Democrats than other regions of the respective states. The role of media is definitely one possibility to consider. Additionally, these regions with close proximity to New York City likely feature differing demography and culture compared to the remaining part of each state. That is to emphasize that correlation may not reflect causation necessarily. The counties and towns included in the New York City media market are done so because the NYC metropolitan area has great influence and relevance in these regions, grouping them by cultural similarity. While there are many factors to consider, it is interesting to see the potential influence NYC has on elections in neighboring states.</p>
+
+<h3 id="data-sources">Data Sources</h3>
+
+<p><a href="https://datablends.us/2021/01/14/a-useful-dma-shapefile-for-tableau-and-alteryx/">National map of designed market areas (DMAs)</a></p>
+
+<p><a href="https://gis.ny.gov/gisdata/inventories/details.cfm?DSID=927">Shapefile of New York counties</a></p>
+
+<p><a href="https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=24">Shapefile of Pennsylvania counties</a></p>
+
+<p><a href="https://catalog.data.gov/dataset/tiger-line-shapefile-2019-state-connecticut-current-county-subdivision-state-based">Shapefile of Connecticut counties</a></p>
+
+<p><a href="https://www.nytimes.com/interactive/2022/11/08/us/elections/results-pennsylvania.html">Pennsylvania election results, 2022</a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/2020_United_States_presidential_election_in_Pennsylvania">Pennsylvania election results, 2020</a></p>
+
+<p><a href="https://www.nytimes.com/interactive/2022/11/08/us/elections/results-new-york.html">New York election results, 2022</a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/2020_United_States_presidential_election_in_New_York">New York election results, 2020</a></p>
+
+<p><a href="https://www.nytimes.com/interactive/2022/11/08/us/elections/results-connecticut.html">Connecticut election results, 2022</a></p>
+
+<p><a href="https://www.nbcconnecticut.com/news/politics/decision-2020/town-by-town-results-how-did-connecticut-vote-in-the-2020-presidential-election/2355898/">Connecticut election resutls, 2020</a></p>
+
+<h3 id="disclaimer">Disclaimer</h3>
+
+<p>Vote totals were taken as reported before official results were certified, so the finalized numbers may be slightly different than what is presented here.</p>
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
