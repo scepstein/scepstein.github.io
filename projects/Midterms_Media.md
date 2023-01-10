@@ -2,7 +2,7 @@
 layout: project
 type: project
 image: img/Midterms_Media/icon.jpg
-title: "The Role of Media in 2022 Midterm Elections"
+title: "The role of media in 2022 midterm elections"
 date: 2022
 published: true
 labels:
@@ -14,7 +14,10 @@ labels:
 - R/rjson
 - R/ggplot2
 - R/cowplot
-summary: "Analysis of 2022 Midterm Elections and the role of media markets."
+- ETL (Extract, Transform, Load) Integration
+- data visualization
+- Geographic information systems
+summary: "Use of R-programming to integrate recent election results with geographic information data to generate maps to determine the effect of media on the 2022 midterm results."
 ---
 
 ### Introduction
