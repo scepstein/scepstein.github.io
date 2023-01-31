@@ -1,0 +1,27 @@
+---
+layout: project
+type: project
+image: img/Midterms_Media/icon.jpg
+title: "Design of a web application to display and map NYPL library locations for any book in the online catalog."
+date: 2023-01
+published: true
+labels:
+- Python
+- Flask
+- Google Cloud Platform
+- Google Maps API
+- HTML/CSS/Javascript
+summary: "Use of R-programming to integrate recent election results with geographic information data to generate maps to determine the effect of media on the 2022 midterm results."
+---
+
+#This page is currently in development.
+
+### Introduction
+
+In this blog post, I plan to use the R programming language to analyze the results of the 2022 Midterm elections in New York, Connecticut, and Pennsylvania. I will compare county and town election results from the 2020 presidential election to senatorial and gubernatorial elections in 2022. Further, I look at the impact of geospatial media markets on election results in these states. Through generation of maps and data plots, I hope to identify any connections between common media presence and trends in election results. 
+
+### Code and Packages Used
+
+old: content: RStudio was used as the IDE for this project. The entire project was analyzed using the R programming language. Data in csv, json, and shp file types were analyzed. The following R packages were used: rgdal, sf, rjson, ggplot2, and cowplot.
+
+old content: [Click here](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media) to view all the code used to produce analysis and visualizations below. 
