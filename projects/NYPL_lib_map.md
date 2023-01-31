@@ -1,7 +1,7 @@
 ---
 layout: project
 type: project
-image: img/Midterms_Media/icon.jpg
+image: img/NYPL_lib_map/NYPL_lib_ico.png
 title: "Design of a web application to map NYPL library locations for any book in the online catalog."
 date: 2023-01
 published: true
@@ -15,6 +15,8 @@ labels:
 - Javascript
 summary: "A Python-based web-scraper is deployed via Flask app to gather information from the NYPL catalog to determine which libraries in the system stock a specified book. HTML/CSS/Javascript is used to render an interactive map to geographically position the found libraries and denote availability status of the particular item at that location."
 ---
+
+
 
 ### Introduction
 
