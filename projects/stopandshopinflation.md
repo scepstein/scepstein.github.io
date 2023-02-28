@@ -58,7 +58,7 @@ Among the first visualizations I made from the trove of data involved isolating 
 
 <img class="img-fluid" src="../img/stopandshopinflation/meat.png" width="80%">
 
-Similarly, fruit and veggies don't exhibit inflationary trends either, at least wholistically. Some items are at all time high prices in the past year, while others all time lows. 
+Similarly, fruit and veggies don't exhibit inflationary trends either, at least holistically. Some items are at all time high prices in the past year, while others all time lows. 
 
 <img class="img-fluid" src="../img/stopandshopinflation/fruit.png" width="80%">
 <img class="img-fluid" src="../img/stopandshopinflation/veggies.png" width="80%">
@@ -70,7 +70,7 @@ Using Tableau, I created an interactive visualization, which can be accessed [he
 
 <img class="img-fluid" src="../img/stopandshopinflation/Tableau.png" width="80%">
 
-Lastly, I prepared a script in R to caluculate year-to-year inflation rates across all product items. The script would identify any product that was purchased at least once per year in a span of subsequent years (e.g., 2018-2019, 2019-2020, etc.) and calculate the average price change over that time. The script is shown below.
+Lastly, I prepared a script in R to calculate year-to-year inflation rates across all product items. The script would identify any product that was purchased at least once per year in a span of subsequent years (e.g., 2018-2019, 2019-2020, etc.) and calculate the average price change over that time. The script is shown below.
 
 ```r
 library(lubridate)
