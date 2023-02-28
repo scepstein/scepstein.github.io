@@ -66,6 +66,8 @@ Similarly, fruit and veggies don't exhibit inflationary trends either, at least 
 For similar visualizations with dairy products and drinks, see the end of the post. 
 
 Using Tableau, I created an interactive visualization, which can be accessed [here.](https://public.tableau.com/app/profile/samuel.epstein/viz/SSPricingOverTime/Veggie2?publish=yes) In the graph, food seperated by category is averaged over three month increments to identify signficant trends among similar foods. The Tableau model is interactive and provides tool tips with information on each point. A screenshot of the Tableau figure is shown below. 
+
+
 <img class="img-fluid" src="../img/stopandshopinflation/Tableau.png" width="80%">
 
 Lastly, I prepared a script in R to caluculate year-to-year inflation rates across all product items. The script would identify any product that was purchased at least once per year in a span of subsequent years (e.g., 2018-2019, 2019-2020, etc.) and calculate the average price change over that time. The script is shown below.
