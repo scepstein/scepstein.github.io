@@ -4,7 +4,7 @@ type: project
 image: img/stopandshopinflation/icon.png
 title: "Scraping and analysis of Stop and Shop receipts to study the impact of inflation on food prices."
 date: 2023-02
-published: false
+published: true
 labels:
 - Python
 - R
