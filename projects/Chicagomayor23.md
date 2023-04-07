@@ -22,11 +22,17 @@ Chicago elects its mayors in a two-round election system. In the first round, ca
 
 ### Clues Left by the First Round of Voting
 
-Going into the runoff election, I had reviewed some of the data from the first round of voting. I was by no means confident in Johnson's ability to win the runoff but I did identify some "writing on the wall" that could have (and did) amount to his eventual victory. 
+Going into the runoff election, I had already reviewed some of the data from the first round of voting. I was not particularly confident in Johnson's ability to win the runoff due to his >10% trail in the first round, but I did identify some writing on the wall that could have (and did) amount to his eventual victory. Looking at a map of precinct winners from the first round, several of the leading candidates carved out regions of popularity.
 
-<img class="img-fluid" src="../img/chicago_mayor_23/round1map.png" width="45%">
+<img class="img-fluid" src="../img/chicago_mayor_23/round1map.png" width="70%">
 
+One of the leading questions going into the runoff election was "how are the voters who supported Lori Lightfoot, Chuy Garcia, and other candidates going to align in the two person race?" The first attempt at answering this question was by conducting a correlation analysis between the different candidates' performances across the various precincts. Here, I was able to identify a strong negative correlation between the performances of Lightfoot and Vallas: where Lightfoot did well Vallas did poorly and vice versa (r=-0.69). 
 
+<img class="img-fluid" src="../img/chicago_mayor_23/round1matrix.png" width="40%">
+
+To investigate further, an analysis of all of the precincts were considered in terms of Vallas and Johnson support in the first round. Any points above the Vallas-Johnson interface indicate precincts that supported Johnson more than Vallas and vice versa for below. Interestingly, nearly all of the Lightfoot-won precincts break for Johnson over Vallas. The positioning of the cluster in the bottom left section of the graph indicates that both Vallas and Johnson did not get much of the vote here, but Johnson was clearly favored. Before the runoff election, this left me with two competing theories: either (A) the greater support for Johnson over Vallas among non-Lightfoot voters in the Lightfoot-won districts is indicative that Johnson is the preferable second choice to Lightfoot overall in these districts or (B) the Lightfoot and non-Lightfoot contigencies will act completely independent of each other and all the Lightfoot voters could swing to Vallas in the runoff.
+
+<img class="img-fluid" src="../img/chicago_mayor_23/round1scatter.png" width="70%">
 
 
 
