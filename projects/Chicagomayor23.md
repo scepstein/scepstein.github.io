@@ -58,7 +58,7 @@ Lastly, I generated two maps to show areas where Vallas and Johnson's vote share
 
 Code for this project was written entirely in R. 
 
-[Click here](https://github.com/scepstein/scepstein.github.io/tree/main/code/Midterms_Media) to view all the code used to produce the analysis and visualizations. 
+[Click here](https://github.com/scepstein/scepstein.github.io/blob/main/code/Chicagomayor23/chicago%20mayor%2023.R) to view all the code used to produce the analysis and visualizations. 
 
 
 ### Data Sources
