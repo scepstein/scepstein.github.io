@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Scraping and analysis of Stop and Shop receipts to study the impact of inflation on food prices. | Samuel Epstein | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://avatars.githubusercontent.com/u/102193968?v=4">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Samuel Epstein | Professional Portfolio">
+    <meta property="og:url" content="https://scepstein.github.io/projects/stopandshopinflation.html">
+    <meta property="og:title" content="Scraping and analysis of Stop and Shop receipts to study the impact of inflation on food prices. | Samuel Epstein | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/102193968?v=4">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Scraping and analysis of Stop and Shop receipts to study the impact of inflation on food prices. | Samuel Epstein | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Samuel Epstein</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Scraping and analysis of Stop and Shop receipts to study the impact of inflation on food prices.</h1>
+ <h4 id="tldr">TLDR:</h4>
+<p>Five years of my friend’s online Stop and Shop receipts were scraped using a Python script to collect data on the price of groceries over time to measure the impact of inflation. Plots and analysis using Python, R, and Tableau try to answer the question: how serious is the impact of inflation?</p>
+
+<h3 id="introduction">Introduction</h3>
+<p>The topic of economic inflation rears its ugly head in the national discussion on politics and wellbeing every now and again and has remained a pertinent issue for many Americans over the past year. As the costs of goods and services increase across the market, the burden is passed onto the consumer to make up the difference. Using a trove of grocery data, I was able to track the costs of groceries by item over time in order to determine if the effects of inflation produced any noticeable impact on his expenses. While the scope of the data remains limited to foods my friend likes to eat, the study tracks the prices of hundreds of distinct product items purchased multiple times over the past five years.</p>
+
+<h3 id="designing-a-scraper-to-collect-individual-item-data">Designing a Scraper to Collect Individual Item Data</h3>
+<p>With a collection of online grocery receipts, each saved as an HTML file, I prepared a script that can parse through each file and extract data pertaining to individual items purchased and the unit cost of the specified item. I used the library BeautifulSoup to aid HTML parsing and pandas to construct a dataframe with the resulting extracted data. I identified a unique class tag which would signal that the div element with that tag contained all the data we need to fetch on each item. Therefore, I was able to collect information on the item name, quantity purchased, and unit price for each item listed on each receipt. The script I wrote is shown below:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">file_list</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="s">"html.parser"</span><span class="p">)</span>
+
+    <span class="c1">#Identify elements containing info for each groceries
+</span>    <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">))):</span>
+        <span class="k">if</span> <span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">)[</span><span class="n">x</span><span class="p">].</span><span class="n">has_attr</span><span class="p">(</span><span class="s">"class"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s">"order-history-list_item"</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">)[</span><span class="n">x</span><span class="p">][</span><span class="s">'class'</span><span class="p">]:</span>
+                <span class="nb">list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">)[</span><span class="n">x</span><span class="p">])</span>
+
+    <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">list</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">'span'</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="c1">#Excludes items that are substitutions because they're coded differently 
+</span>
+    <span class="c1">#Isolate data of interest
+</span>    <span class="n">image_code</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'img'</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s">'src'</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">]</span>
+    <span class="n">quantity</span> <span class="o">=</span>  <span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">)[</span><span class="mi">2</span><span class="p">].</span><span class="n">find_all</span><span class="p">(</span><span class="s">"div"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">find_all</span><span class="p">(</span><span class="s">"div"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">" x "</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">]</span>
+    <span class="n">unit_price</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">)[</span><span class="mi">2</span><span class="p">].</span><span class="n">find_all</span><span class="p">(</span><span class="s">"div"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">find_all</span><span class="p">(</span><span class="s">"div"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">" x "</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">" ea."</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">"$"</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">]</span>
+    <span class="n">item_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'div'</span><span class="p">)[</span><span class="mi">2</span><span class="p">].</span><span class="n">find_all</span><span class="p">(</span><span class="s">"div"</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">find_all</span><span class="p">(</span><span class="s">"div"</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">]</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="p">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">j</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"/"</span><span class="p">)[</span><span class="mi">5</span><span class="p">].</span><span class="n">split</span><span class="p">(</span><span class="s">'.html'</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">format</span> <span class="o">=</span> <span class="s">"%Y-%m-%d"</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">))]</span>
+
+    <span class="c1">#Combine into df
+</span>    <span class="k">if</span> <span class="n">file_list</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s">"image_code"</span><span class="p">:</span> <span class="n">image_code</span><span class="p">,</span> <span class="s">"quantity"</span><span class="p">:</span> <span class="n">quantity</span><span class="p">,</span> <span class="s">"unit_price"</span><span class="p">:</span> <span class="n">unit_price</span><span class="p">,</span> <span class="s">"item_name"</span><span class="p">:</span> <span class="n">item_name</span><span class="p">,</span> <span class="s">"date"</span><span class="p">:</span> <span class="n">date</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">file_list</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s">"image_code"</span><span class="p">:</span> <span class="n">image_code</span><span class="p">,</span> <span class="s">"quantity"</span><span class="p">:</span> <span class="n">quantity</span><span class="p">,</span> <span class="s">"unit_price"</span><span class="p">:</span> <span class="n">unit_price</span><span class="p">,</span> <span class="s">"item_name"</span><span class="p">:</span> <span class="n">item_name</span><span class="p">,</span> <span class="s">"date"</span><span class="p">:</span> <span class="n">date</span><span class="p">})],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+<h3 id="visualizations-galore">Visualizations Galore</h3>
+<p>Code for several of the visualizations shown below is available <a href="https://github.com/scepstein/scepstein.github.io/tree/main/code/stopandshopinflation">here.</a></p>
+
+<p>Among the first visualizations I made from the trove of data involved isolating some of the most frequently purchased items (thus featuring a robust representation of price differences over time). First, I plotted the prices of 12 of the most popular meat items over time. In these graphs, the price at a given point is compared to the average price over the entire time window, so blue area corresponds to the price being above average and red area is below average. No clear inflationary trend persists across the meat data.</p>
+
+<p><img class="img-fluid" src="../img/stopandshopinflation/meat.png" width="80%" /></p>
+
+<p>Similarly, fruit and veggies don’t exhibit inflationary trends either, at least holistically. Some items are at all time high prices in the past year, while others all time lows.</p>
+
+<p><img class="img-fluid" src="../img/stopandshopinflation/fruit.png" width="80%" />
+<img class="img-fluid" src="../img/stopandshopinflation/veggies.png" width="80%" /></p>
+
+<p>For similar visualizations with dairy products and drinks, see the end of the post.</p>
+
+<p>Using Tableau, I created an interactive visualization, which can be accessed <a href="https://public.tableau.com/app/profile/samuel.epstein/viz/SSPricingOverTime/Veggie2?publish=yes">here.</a> In the graph, food seperated by category is averaged over three month increments to identify signficant trends among similar foods. The Tableau model is interactive and provides tool tips with information on each point. A screenshot of the Tableau figure is shown below.</p>
+
+<p><img class="img-fluid" src="../img/stopandshopinflation/Tableau.png" width="80%" /></p>
+
+<p>Lastly, I prepared a script in R to calculate year-to-year inflation rates across all product items. The script would identify any product that was purchased at least once per year in a span of subsequent years (e.g., 2018-2019, 2019-2020, etc.) and calculate the average price change over that time. The script is shown below.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span><span class="w">
+</span><span class="n">groceries</span><span class="o">$</span><span class="n">date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ymd</span><span class="p">(</span><span class="n">groceries</span><span class="o">$</span><span class="n">date</span><span class="p">)</span><span class="w">
+</span><span class="n">groceries</span><span class="o">$</span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">year</span><span class="p">(</span><span class="n">groceries</span><span class="o">$</span><span class="n">date</span><span class="p">)</span><span class="w">
+
+</span><span class="n">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span><span class="w">
+</span><span class="n">datasummary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">groceries</span><span class="p">,</span><span class="w"> </span><span class="n">item_name</span><span class="p">,</span><span class="w"> </span><span class="n">year</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise</span><span class="p">(</span><span class="n">avg_price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">unit_price</span><span class="p">))</span><span class="w"> 
+
+</span><span class="n">yearbyyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">unique</span><span class="p">(</span><span class="n">datasummary</span><span class="o">$</span><span class="n">item_name</span><span class="p">))</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"item"</span><span class="p">)</span><span class="w">
+</span><span class="n">yearbyyear</span><span class="o">$</span><span class="n">TO18_19</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">)</span><span class="w">
+</span><span class="n">yearbyyear</span><span class="o">$</span><span class="n">TO19_20</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">)</span><span class="w">
+</span><span class="n">yearbyyear</span><span class="o">$</span><span class="n">TO20_21</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">)</span><span class="w">
+</span><span class="n">yearbyyear</span><span class="o">$</span><span class="n">TO21_22</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">)</span><span class="w">
+
+</span><span class="n">year_percent_difference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">year1</span><span class="p">,</span><span class="w"> </span><span class="n">year2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">year1</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">year</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">year2</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">year</span><span class="p">){</span><span class="w">
+    </span><span class="n">yearbyyear</span><span class="p">[[</span><span class="n">col</span><span class="p">]][</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="w"> </span><span class="p">(</span><span class="n">dummy</span><span class="o">$</span><span class="n">avg_price</span><span class="p">[</span><span class="n">match</span><span class="p">(</span><span class="n">year2</span><span class="p">,</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">year</span><span class="p">)]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">avg_price</span><span class="p">[</span><span class="n">match</span><span class="p">(</span><span class="n">year1</span><span class="p">,</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">year</span><span class="p">)])</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">avg_price</span><span class="p">[</span><span class="n">match</span><span class="p">(</span><span class="n">year1</span><span class="p">,</span><span class="w"> </span><span class="n">dummy</span><span class="o">$</span><span class="n">year</span><span class="p">)]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">yearbyyear</span><span class="o">$</span><span class="n">item</span><span class="p">)){</span><span class="w">
+  </span><span class="n">dummy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">datasummary</span><span class="p">,</span><span class="w"> </span><span class="n">item_name</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">yearbyyear</span><span class="o">$</span><span class="n">item</span><span class="p">[</span><span class="n">x</span><span class="p">])</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="o">:</span><span class="m">3</span><span class="p">){</span><span class="w">
+  </span><span class="n">year_percent_difference</span><span class="p">(</span><span class="m">2018</span><span class="o">+</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="m">2019</span><span class="o">+</span><span class="n">r</span><span class="p">,</span><span class="w">  </span><span class="n">colnames</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">)[</span><span class="m">2</span><span class="o">+</span><span class="n">r</span><span class="p">])</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">tally</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"'18 to '19"</span><span class="p">,</span><span class="w"> </span><span class="s2">"'19 to '20"</span><span class="p">,</span><span class="w"> </span><span class="s2">"'20 to '21"</span><span class="p">,</span><span class="w"> </span><span class="s2">"'21 to '22"</span><span class="p">))</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">tally</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Year Range"</span><span class="p">)</span><span class="w">
+</span><span class="n">tally</span><span class="o">$</span><span class="n">averagechange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">)</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="o">:</span><span class="m">3</span><span class="p">){</span><span class="w">
+  </span><span class="n">tally</span><span class="o">$</span><span class="n">averagechange</span><span class="p">[</span><span class="n">y</span><span class="m">+1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">[[</span><span class="n">colnames</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">)[</span><span class="m">2</span><span class="o">+</span><span class="n">y</span><span class="p">]]],</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+  </span><span class="n">tally</span><span class="o">$</span><span class="n">sd</span><span class="p">[</span><span class="n">y</span><span class="m">+1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sd</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">[[</span><span class="n">colnames</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">)[</span><span class="m">2</span><span class="o">+</span><span class="n">y</span><span class="p">]]],</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+  </span><span class="n">tally</span><span class="o">$</span><span class="n">n</span><span class="p">[</span><span class="n">y</span><span class="m">+1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">[[</span><span class="n">colnames</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">)[</span><span class="m">2</span><span class="o">+</span><span class="n">y</span><span class="p">]]],</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">[[</span><span class="n">colnames</span><span class="p">(</span><span class="n">yearbyyear</span><span class="p">)[</span><span class="m">2</span><span class="o">+</span><span class="n">y</span><span class="p">]]],</span><span class="w"> </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+  </span><span class="n">tally</span><span class="o">$</span><span class="n">SE</span><span class="p">[</span><span class="n">y</span><span class="m">+1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tally</span><span class="o">$</span><span class="n">sd</span><span class="p">[</span><span class="n">y</span><span class="m">+1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="n">tally</span><span class="o">$</span><span class="n">n</span><span class="p">[</span><span class="n">y</span><span class="m">+1</span><span class="p">])</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+<p>The collected data was then graphed in a histogram-type density plot to visualize the frequency and distribution of price changes for all the products featured in the two-year time span increments. As shown below, the first three spans (2018-2019, 2019-2020, and 2020-2021) yield similar curves that peak right at x=0 (percent change in price between the first year and second year), indicating that a good’s price most commonly does not change between the first and second year of the span. The curve yielded by the fourth span (2021-2022) is notably shorter than the others and right-shifted, indicating that deviations from the most common output are more frequent and values trend more towards price increases. These two characteristics of the 2021-2022 curve are indicative of an increase in the number of products featuring price increases over this span, relative to previous spans. As a result, the shift suggests that inflation had a noticeable effect on food prices increasing from 2021 to 2022 that was not clearly detected in the prior visualizations that relied more on cherry picking items of interest.</p>
+
+<p><img class="img-fluid" src="../img/stopandshopinflation/density.png" width="80%" /></p>
+
+<p>Further visualizations for dairy and drinks:
+<img class="img-fluid" src="../img/stopandshopinflation/dairy.png" width="80%" />
+<img class="img-fluid" src="../img/stopandshopinflation/drinks.png" width="80%" /></p>
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

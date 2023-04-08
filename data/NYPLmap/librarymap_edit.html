@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Library Finder</title>
+  </head>
+  <body style="background-color:#FFF4F3;">
+    <h1>NYPL Library Finder</h1>
+    <p>Use the tool below to find available books in the NYPL library system, uniting libraries in Manhattan, the Bronx, and Staten Island. The existing catalog provides a list of libraries that hold copies of each book but does not present them in a geographically intuitive display. To solve this, you can enter the URL corresponding to any item in the catalog and a map will be generated to show all of the library locations that stock the item.</p>
+    <p><img 
+    src="http://maps.google.com/mapfiles/ms/micons/blue-dot.png" 
+    alt="Blue Pin" />
+    Blue pins denote libraries with at least one copy available.</p>
+    <p><img 
+      src="http://maps.google.com/mapfiles/ms/micons/red-dot.png" 
+      alt="Red Pin" />
+      Red pins denote libraries that typically stock the book but have no remaining copies available.</p>
+      <p><img 
+        src="https://chromeos-dev.imgix.net/android/pointer-styling/Mouse-Pointer7.png?auto=format,compress&fit=fillmax&w=1500" width="1%"
+        alt="Computer Cursor" />
+        Click the pins to display the name of the library.</p>
+    <p><a href="https://browse.nypl.org/iii/encore/?lang=eng">Visit the NYPL Library Catalog here to find a URL for your desired book.</a> Note that you need an NYPL account to access the catalog.</p>
+    <p>Or, test out the system with some examples where you can copy and paste the link provided:</p>
+    <p>The Cat Who Saved Books by Sōsuke Natsukaw: https://browse.nypl.org/iii/encore/record/C__Rb22622090</p>
+    <p>To Kill A Mockingbird by Harper Lee: https://browse.nypl.org/iii/encore/record/C__Rb18166972</p>
+    <p>The Order of Time by Carlo Rovelli: https://browse.nypl.org/iii/encore/record/C__Rb22457437</p>
+    <div id="loading-message" style="display:none;"><p>Please be patient while the content is rendering...</p></div>
+    <form id="website-form">
+        <input type="text" name="website_link" placeholder="Enter website link here">
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <script>
+        document.getElementById("website-form").addEventListener("submit", function(event) {
+  event.preventDefault();
+  document.getElementById("loading-message").style.display = "block";
+  var website_link = document.querySelector('input[name="website_link"]').value;
+  fetch('https://nypl-library-map.uc.r.appspot.com/libraries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ website_link: website_link })
+  })
+  .then(function(response) {
+      return response.json();
+  })
+  .then(function(data) {
+      console.log(data);
+      globalData = data;
+      var src = `https://maps.googleapis.com/maps/api/js?key=${data.api_key}&callback=initMap`;
+      var script = document.createElement('script');
+      script.src = src;
+      document.body.appendChild(script);
+  });
+}, { passive: false });
+
+    var currentInfoWindow;
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 40.7831, lng: -73.9712},
+    zoom: 11.5
+  });
+  var markers = [];
+
+  for (var i = 0; i < globalData.map_data.length; i++) {
+    var marker;
+    if (globalData.map_data[i].category === "available") {
+      marker = new google.maps.Marker({
+        position: {lat: globalData.map_data[i].lat, lng: globalData.map_data[i].lng},
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png'
+      });
+    } else if (globalData.map_data[i].category === "unavailable") {
+      marker = new google.maps.Marker({
+        position: {lat: globalData.map_data[i].lat, lng: globalData.map_data[i].lng},
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/ms/micons/red-dot.png'
+      });
+      document.getElementById("loading-message").style.display = "none";
+    }
+
+    marker.addListener('click', (function(marker, i) {
+      return function() {
+        if (currentInfoWindow) {
+          currentInfoWindow.close();
+        }
+        var infowindow = new google.maps.InfoWindow({
+          content: globalData.map_data[i].name
+        });
+        infowindow.open(map, marker);
+        currentInfoWindow = infowindow;
+      }
+    })(marker, i));
+
+    markers.push(marker);
+  }
+}
+    </script>
+  </body>
+</html>

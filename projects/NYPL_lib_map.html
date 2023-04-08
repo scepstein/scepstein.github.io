@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Design of a web application to map NYPL library locations for any book in the online catalog. | Samuel Epstein | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://avatars.githubusercontent.com/u/102193968?v=4">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Samuel Epstein | Professional Portfolio">
+    <meta property="og:url" content="https://scepstein.github.io/projects/NYPL_lib_map.html">
+    <meta property="og:title" content="Design of a web application to map NYPL library locations for any book in the online catalog. | Samuel Epstein | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/102193968?v=4">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Design of a web application to map NYPL library locations for any book in the online catalog. | Samuel Epstein | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Samuel Epstein</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Design of a web application to map NYPL library locations for any book in the online catalog.</h1>
+ <h3 id="introduction">Introduction</h3>
+
+<p>The New York Public Library (NYPL) system consists of libraries throughout Manhattan, the Bronx, and Staten Island. All of the items served within this system are discoverable on the online NYPL catalog. When searching for an item, the catalog simply generates a list of libraries that stock the item but lacks the ability to geographically assess the location of the libraries where the item is available. As a frequent reader and library patron, I wanted to build an application that would enable me to quickly determine which libraries were holding a book I was looking for and which of those were near my location.</p>
+
+<p>Using several libraries (not the book-housing kind) in Python, including Beautiful Soup, Pandas, and Requests, I developed a web-scarping tool that required the input of a library catalog entry URL and in turn produced the list of libraries carrying the item that are displayed on the web page for the typical patron. Scraping this information and the availability status of the item at each location, I could pair this information with geographic coordinates for each library to generate a map. Using Flask and Google Cloud Platform, I was able to deploy this application to a server to handle requests to my algorithm. I tailored HTML, CSS, and Javascript code to build the front-end of the application. With the help of the Google Maps API, a neat, interactive map is generated to display the libraries that carry the requested item.</p>
+
+<p><a href="https://raw.githack.com/scepstein/scepstein.github.io/main/data/NYPLmap/NYPL_library_finder.html">Try out the library finder in action HERE</a></p>
+
+<h3 id="finished-product">Finished Product</h3>
+
+<p>The finished product is functional and can be accessed at the link above. In summary, a minimal front-end webpage is available to recieve the URL for a particular NYPL catalog item. In the following example, I’ll show the entry for To Kill a Mockingbird by Harper Lee.</p>
+
+<p><img class="img-fluid" src="../img/NYPL_lib_map/front end 1.png" width="80%" /></p>
+
+<p>Submission of the URL generates an interactive Google Map with pins for all library locations that typically stock the item. The pins are then color-coded for whether or not at least one copy of  the item is currently in stock at the specific location (screenshot below).</p>
+
+<p><img class="img-fluid" src="../img/NYPL_lib_map/front end 2.png" width="80%" /></p>
+
+<p>The pins can also be clicked on to reveal the library name (screenshot below).</p>
+
+<p><img class="img-fluid" src="../img/NYPL_lib_map/front end 3.png" width="80%" /></p>
+
+<h3 id="how-its-done">How it’s done.</h3>
+
+<h4 id="server-side-algorithm">Server-Side Algorithm</h4>
+
+<p>The main functionality of the app relies on the following python script. The package Beautiful soup is used to fetch the HTML code from the provided URL to the library catalog page. The <a> elements are searched for strings that denote the library names as they are used in the table presented by the catalog. This collects information on the list of libraries that stock the item and the availability status at that location. The name of the library as listed (because they are modified with section titles such as “Fiction”) is compared to a dataframe of library names, where the name with highest string similarity is selected along with geographic coordinates for the location. The data is then filtered to handle instances where one library possesses multiple copies of an item. If a library maintains at least one copy that is currently available, then it is marked as available. Otherwise, it is marked as unavilable. The data is then returned in json format for the front-end javascript code.</a></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">website_link</span><span class="p">):</span>
+        <span class="c1">#Scrape full HTMl file from webpage
+</span>        <span class="n">soup</span><span class="o">=</span><span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">website_link</span><span class="p">).</span><span class="n">content</span><span class="p">,</span> <span class="s">"html.parser"</span><span class="p">)</span>
+        <span class="c1">#Scrape library names from HTML file to generate a list of available and unavailable books
+</span>        <span class="n">hits_all</span><span class="o">=</span><span class="p">[]</span> 
+        <span class="n">hits_avail</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="s">"bibHoldingsAllItems"</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)[</span><span class="n">x</span><span class="p">][</span><span class="s">'href'</span><span class="p">]:</span>
+                <span class="n">hits_all</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)[</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="s">"bibHoldingsAvailableItems2"</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)[</span><span class="n">x</span><span class="p">][</span><span class="s">'href'</span><span class="p">]:</span>
+                <span class="n">hits_avail</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)[</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">hits_all</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'a'</span><span class="p">)[</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">text</span><span class="p">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="c1">#Generate list of library map info
+</span>        <span class="n">geokey</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"https://raw.githubusercontent.com/scepstein/scepstein.github.io/main/data/NYPLmap/libdata.csv"</span><span class="p">)</span>
+        <span class="n">map_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">def</span> <span class="nf">library_geokey_sorting</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">category_code</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">vector</span><span class="p">:</span> 
+                <span class="n">sim_vector</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">geokey</span><span class="p">[</span><span class="s">"name"</span><span class="p">]:</span>
+                    <span class="n">sim_vector</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">SequenceMatcher</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">).</span><span class="n">ratio</span><span class="p">())</span>
+                <span class="n">map_data</span><span class="p">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s">'name'</span><span class="p">:</span> <span class="n">geokey</span><span class="p">[</span><span class="s">"name"</span><span class="p">][</span><span class="n">sim_vector</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sim_vector</span><span class="p">))],</span>
+                    <span class="s">'lat'</span><span class="p">:</span> <span class="n">geokey</span><span class="p">[</span><span class="s">"lattitude"</span><span class="p">][</span><span class="n">sim_vector</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sim_vector</span><span class="p">))],</span>
+                    <span class="s">'lng'</span><span class="p">:</span> <span class="n">geokey</span><span class="p">[</span><span class="s">"longitude"</span><span class="p">][</span><span class="n">sim_vector</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">sim_vector</span><span class="p">))],</span>
+                    <span class="s">'category'</span><span class="p">:</span> <span class="n">category_code</span>
+                <span class="p">})</span>
+        <span class="n">library_geokey_sorting</span><span class="p">(</span><span class="n">hits_all</span><span class="p">,</span> <span class="s">"unavailable"</span><span class="p">)</span>
+        <span class="n">library_geokey_sorting</span><span class="p">(</span><span class="n">hits_avail</span><span class="p">,</span> <span class="s">"available"</span><span class="p">)</span>
+        <span class="c1">#Filter through the map data to avoid repeat pins
+</span>        <span class="n">filtered_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">seen_buildings</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">map_data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen_buildings</span><span class="p">:</span> <span class="c1">#First time mentioned libraries always get filtered through immediately 
+</span>                <span class="n">seen_buildings</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+                <span class="n">filtered_data</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filtered_data</span><span class="p">:</span> <span class="c1">#if a library is added and the new entry shows an availability, it replaces the status of the one on the filtered list
+</span>                    <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="ow">and</span> <span class="n">m</span><span class="p">[</span><span class="s">'category'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'available'</span><span class="p">:</span>
+                        <span class="n">f</span><span class="p">[</span><span class="s">'category'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'available'</span>
+        <span class="k">return</span> <span class="n">filtered_data</span>
+</code></pre></div></div>
+
+<h4 id="front-end-javascript-code">Front-End Javascript Code</h4>
+
+<p>The server side library data is then passed to the front-end javascript code, which generates the Google Map using Google Maps API. The following Javascript code is used to establish the map. The map is centered around Manhattan. Markers are generated from the passed data and designated with red or blue pin icons based on the availability status at the library. Upon clicking, the infowindow appears for the selected pin denoting the library name.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">initMap</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nb">Map</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">map</span><span class="dl">'</span><span class="p">),</span> <span class="p">{</span>
+    <span class="na">center</span><span class="p">:</span> <span class="p">{</span><span class="na">lat</span><span class="p">:</span> <span class="mf">40.7831</span><span class="p">,</span> <span class="na">lng</span><span class="p">:</span> <span class="o">-</span><span class="mf">73.9712</span><span class="p">},</span>
+    <span class="na">zoom</span><span class="p">:</span> <span class="mf">11.5</span>
+  <span class="p">});</span>
+  <span class="kd">var</span> <span class="nx">markers</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">marker</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">category</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">available</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">Marker</span><span class="p">({</span>
+        <span class="na">position</span><span class="p">:</span> <span class="p">{</span><span class="na">lat</span><span class="p">:</span> <span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">lat</span><span class="p">,</span> <span class="na">lng</span><span class="p">:</span> <span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">lng</span><span class="p">},</span>
+        <span class="na">map</span><span class="p">:</span> <span class="nx">map</span><span class="p">,</span>
+        <span class="na">icon</span><span class="p">:</span> <span class="dl">'</span><span class="s1">http://maps.google.com/mapfiles/ms/micons/blue-dot.png</span><span class="dl">'</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">category</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">unavailable</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">Marker</span><span class="p">({</span>
+        <span class="na">position</span><span class="p">:</span> <span class="p">{</span><span class="na">lat</span><span class="p">:</span> <span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">lat</span><span class="p">,</span> <span class="na">lng</span><span class="p">:</span> <span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">lng</span><span class="p">},</span>
+        <span class="na">map</span><span class="p">:</span> <span class="nx">map</span><span class="p">,</span>
+        <span class="na">icon</span><span class="p">:</span> <span class="dl">'</span><span class="s1">http://maps.google.com/mapfiles/ms/micons/red-dot.png</span><span class="dl">'</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="nx">marker</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">marker</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">currentInfoWindow</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">currentInfoWindow</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">infowindow</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">maps</span><span class="p">.</span><span class="nx">InfoWindow</span><span class="p">({</span>
+          <span class="na">content</span><span class="p">:</span> <span class="nx">globalData</span><span class="p">.</span><span class="nx">map_data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span>
+        <span class="p">});</span>
+        <span class="nx">infowindow</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">marker</span><span class="p">);</span>
+        <span class="nx">currentInfoWindow</span> <span class="o">=</span> <span class="nx">infowindow</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">})(</span><span class="nx">marker</span><span class="p">,</span> <span class="nx">i</span><span class="p">));</span>
+
+    <span class="nx">markers</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
