@@ -3,7 +3,7 @@ layout: project
 type: project
 image: img/chicago_mayor_23/icon2.png
 title: "Benefits of being a popular second choice: Analysis of the 2023 Chicago mayoral election."
-date: 04/2023
+date: 2023-04
 published: true
 labels:
 - RStudio
